@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Modulo de apartado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  </head>
+  <body>
+  <div class="m-3">
+    <div >
+      <h1 class="text-center">Modulo de apartado </h1>
+      <h2>Contactos</h2>
+    </div>
+
+    <%contacts.forEach(function(con) {%>
+
+    <p>Nombre: <%=con.name%></p>
+    <p>Apellido: <%=con.lastname%></p>
+    <p>Telefono: <%=con.phone%></p>
+    <p>Correo: <%=con.email%></p>
+    <hr>
+    <%});%>
+  </div>
+  </body>
+</html>

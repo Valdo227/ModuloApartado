@@ -1,9 +1,19 @@
-var express = require('express');
-var router = express.Router();
-
+const express = require('express');
+const router = express.Router();
+const Contact = require('../models/ContactModel')
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/',async (req,res) => {
+  const contacts = await Contact.find();
+  console.log(contacts);
+  res.render('index', { contacts});
+});
+
+router.post('/', async (req,res) => {
+  const {name,lastname,phone,email}  = req.body;
+  const contact = new  Contact({name,lastname,phone,email});
+  console.log(contact);
+  await contact.save();
+  res.json("recibido")
 });
 
 module.exports = router;

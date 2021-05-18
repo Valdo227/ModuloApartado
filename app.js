@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var mongoose = require('mongoose');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -9,9 +10,16 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+//database connection
+//uri = 'mongodb+srv://Oswaldo:oswaldo227@cluster0.c0a6k.mongodb.net/ModuloBDD?retryWrites=true&w=majority';
+uri = 'mongodb://localhost/ModuloBDD';
+mongoose.connect(uri)
+    .then(db => console.log("BDD Conectada"))
+    .catch(err => console.log(err));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());

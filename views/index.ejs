@@ -8,15 +8,14 @@
   <div class="m-3">
     <div >
       <h1 class="text-center">Modulo de apartado </h1>
-      <h2>Contactos</h2>
+      <h2>Secciones</h2>
     </div>
 
-    <%contacts.forEach(function(con) {%>
+    <%sections.forEach(function(con) {%>
 
     <p>Nombre: <%=con.name%></p>
-    <p>Apellido: <%=con.lastname%></p>
-    <p>Telefono: <%=con.phone%></p>
-    <p>Correo: <%=con.email%></p>
+    <p>Telefono: <%=con.dimensions%></p>
+    <p>Correo: <%=con.price%></p>
     <hr>
     <%});%>
   </div>

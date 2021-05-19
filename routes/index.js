@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const Contact = require('../models/ContactModel')
+//const Contact = require('../models/ContactModel')
+const Section = require('../models/sectionModel')
 /* GET home page. */
 router.get('/',async (req,res) => {
-  const contacts = await Contact.find();
-  console.log(contacts);
-  res.render('index', { contacts});
+  const sections = await Section.find();
+  console.log(sections);
+  res.render('index', { sections});
 });
 
 router.post('/', async (req,res) => {
-  const {name,lastname,phone,email}  = req.body;
-  const contact = new  Contact({name,lastname,phone,email});
-  console.log(contact);
-  await contact.save();
-  res.json("recibido")
+  const {name,price,dimension}  = req.body;
+  const section = new  section({name,price,dimension});
+  console.log(section);
+  await section.save();
+  res.json("Insertado con exito")
 });
 
 module.exports = router;

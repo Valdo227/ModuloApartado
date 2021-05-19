@@ -1,20 +1,23 @@
-var createError = require('http-errors');
-var express = require('express');
-var mongoose = require('mongoose');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+const app = express();
 
 //database connection
-//uri = 'mongodb+srv://Oswaldo:oswaldo227@cluster0.c0a6k.mongodb.net/ModuloBDD?retryWrites=true&w=majority';
-uri = 'mongodb://localhost/ModuloBDD';
-mongoose.connect(uri)
-    .then(db => console.log("BDD Conectada"))
+const user= 'Oswaldo'
+const password = 'oswaldo227'
+const dbname = 'ModuloBDD'
+const uri =`mongodb+srv://${user}:${password}@cluster0.c0a6k.mongodb.net/${dbname}?retryWrites=true&w=majority`;
+//uri = 'mongodb://localhost/ModuloBDD';
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('DB connected'))
     .catch(err => console.log(err));
 
 // view engine setup
@@ -36,7 +39,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

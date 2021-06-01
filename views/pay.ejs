@@ -3,16 +3,17 @@
 <head>
     <title>Pago</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-<header class="bg-info p-2 text-center">
-    <h1 class=>Finaliza apartado</h1>
+<header class="bg-success p-2 text-center">
+    <h1 class="text-white">Finaliza apartado</h1>
 </header>
 <form class="row d-flex justify-content-center">
     <div class="col-4 m-3 px-4 py-2 border border-secondary rounded">
-        <h4 class="text-center">Datos de pago</h4>
+        <h4 class="text-center">Datos de facturación</h4>
         <span>Contacto</span>
-        <input class="form-control m-2" type="text" placeholder="nombre completo"><
+        <input class="form-control m-2" type="text" placeholder="nombre completo">
         <input class="form-control m-2" type="text" placeholder="telefono">
         <input class="form-control m-2" type="text" placeholder="correo electronico">
         <span>Dirección</span>
@@ -26,14 +27,81 @@
     <div class="col-4 m-3 px-4 py-2 border border-secondary rounded" >
         <h4 class="text-center">Datos de la sección</h4>
         <div class="border rounded p-1 px-2">
-            <p> <strong>Sección: </strong>  <%=section[0].name%> </p>
-            <p><strong>Dimensiones:</strong>  <%=section[0].dimension%> m²</p>
+            <p> <strong>Sección: </strong>  <%=section.name%> </p>
+            <p><strong>Dimensiones:</strong>  <%=section.dimension%> m²</p>
         </div>
         <div class="border rounded p-2">
-           <p class="my-auto"><strong>Total: $<%=section[0].price%></strong></p>
+           <p class="my-auto"><strong>Total: $<%=section.price%></strong></p>
         </div>
-        <div class="d-flex justify-content-center">
-        <input type="submit" class="btn btn-success py-3 px-5 m-3" value="Pagar">
+        <div class="row d-flex justify-content-center my-3">
+            <button type="button" class="col-10 btn btn-success my-4" id="checkout-button">Pago Stripe</button>
+            <script type="text/javascript">
+                // Create an instance of the Stripe object with your publishable API key
+                var stripe = Stripe("pk_test_51IwvTRHKxDxRJvOZMgN25jdDWv8ryGJzj3D8TnuZu150fflHBv8SfKlGTNJmGZJSe66cGDSfEOPEAbgwOfgPDyvw00o8iDbV3y");
+                var checkoutButton = document.getElementById("checkout-button");
+                checkoutButton.addEventListener("click", function () {
+                    fetch("/sections/create-checkout-session", {
+                        method: "POST",
+                    })
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (session) {
+                            return stripe.redirectToCheckout({ sessionId: session.id });
+                        })
+                        .then(function (result) {
+                            // If redirectToCheckout fails due to a browser or network
+                            // error, you should display the localized error message to your
+                            // customer using error.message.
+                            if (result.error) {
+                                alert(result.error.message);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error("Error:", error);
+                        });
+                });
+            </script>
+            <div class="col-11">
+                <div id="smart-button-container">
+                    <div style="text-align: center;">
+                        <div id="paypal-button-container"></div>
+                    </div>
+                </div>
+                <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=MXN" data-sdk-integration-source="button-factory"></script>
+                <script>
+                    function initPayPalButton() {
+                        paypal.Buttons({
+                            style: {
+                                shape: 'rect',
+                                color: 'gold',
+                                layout: 'vertical',
+                                label: 'paypal',
+
+                            },
+
+                            createOrder: function(data, actions) {
+                                return actions.order.create({
+                                    purchase_units: [{"description":"Sección del inmueble","amount":{"currency_code":"MXN","value":20000}}]
+                                });
+                            },
+
+                            onApprove: function(data, actions) {
+                                return actions.order.capture().then(function(details) {
+                                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                                });
+                            },
+
+                            onError: function(err) {
+                                console.log(err);
+                            }
+                        }).render('#paypal-button-container');
+                    }
+                    initPayPalButton();
+                </script>
+            </div>
+
+
         </div>
     </div>
 </form>

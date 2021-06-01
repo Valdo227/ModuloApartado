@@ -4,7 +4,9 @@ const {Schema} = mongoose;
 const ContactSchema = new Schema({
     name:{type: String, require: true},
     phone:{type: String, require: true},
-    email:{type: String, require: true}
+    email:{type: String, require: true},
+    secction_id: {type: String, require: true},
+
 
 })
 

@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
 const SectionSchema = new Schema({
-    name: String,
-    price: Number,
-    dimension: Number
+    name: {type: String, require: true},
+    price: {type: Number, require: true},
+    dimension: {type: Number, require: true}
 
 })
 module.exports = mongoose.model("section",SectionSchema);

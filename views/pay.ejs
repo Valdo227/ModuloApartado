@@ -14,17 +14,20 @@
         <div class="row d-flex justify-content-center">
             <div class="col-4 m-3 px-4 py-2 border border-secondary rounded">
                 <h4 class="text-center">Datos de facturación</h4>
-                <span>Contacto</span>
+                <label for="name">Nombre</label>
                 <input class="form-control m-2" type="text" id="name" placeholder="nombre completo">
-                <input class="form-control m-2" type="text" placeholder="telefono">
+                <label for="number">Telefono</label>
+                <input class="form-control m-2" id="number" type="text" placeholder="telefono">
+                <label for="email">Correo eléctronico</label>
                 <input class="form-control m-2" type="text" id="email" placeholder="correo electronico">
-                <span>Dirección</span>
+                <label for="email" class="row px-3">Dirección
                 <input class="form-control m-2" type="text" placeholder="localidad">
                 <input class="form-control m-2" type="text" placeholder="colonia">
                 <input class="form-control m-2" type="text" placeholder="calle">
                 <input class="form-control m-2" type="text" placeholder="num interior">
                 <input class="form-control m-2" type="text" placeholder="num exterior">
                 <input class="form-control m-2" type="text" placeholder="entre calles">
+                </label>
             </div>
             <div class="col-4 m-3 px-4 py-2 border border-secondary rounded" >
                 <h4 class="text-center">Datos de la sección</h4>
@@ -38,7 +41,7 @@
                 <div class="row d-flex justify-content-center my-3">
                     <div class="sr-main">
 
-                        <form id="payment-form" class="sr-payment-form">
+                        <form id="payment-form" class="sr-payment-form pb-5">
                             <div id="card-element" class="form-control py-2">
                                 <!-- Elements will create input elements here -->
                             </div>
@@ -46,16 +49,14 @@
                             <!-- We'll put the error messages in this element -->
                             <div id="card-errors" role="alert" class="py-2"></div>
 
-                            <button id="button-text" class="btn btn-success py-2">Pay</button>
+                            <button id="button-text" class="btn btn-success p-2 align-self-center">Pagar</button>
                         </form>
 
                         <div id="messages" role="alert" style="display: none;"></div>
                     </div>
-                </div>
-            </div>
 
                     <!--<button type="button" class="col-10 btn btn-success my-4" id="checkout-button">Pago Stripe</button>
-
+-->
                     <div class="col-11">
                         <div id="smart-button-container">
                             <div style="text-align: center;">
@@ -96,12 +97,10 @@
                     </div>
                 </div>
             </div>
-        </form>
-        -->
-        <!-- <script src="http://localhost:3000/javascript/paypage.js"></script> -->
         </div>
     </body>
     <footer>
+        <!-- <script src="http://localhost:3000/javascript/paypage.js"></script> -->
         <script src="http://localhost:3000/javascript/pay.js"></script>
     </footer>
 </html>

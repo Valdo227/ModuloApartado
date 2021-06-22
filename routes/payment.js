@@ -13,7 +13,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY,{
 
 router.get('/config', (req, res) => {
     res.send({
-        publishableKey: process.env.STRIPE_SECRET_KEY});
+        publishableKey: process.env.STRIPE_PUBLIC_KEY});
 });
 
 router.post('/create-payment-intent', async (req, res) => {

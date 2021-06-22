@@ -11,15 +11,15 @@
             <h1 class="text-white">Finaliza apartado</h1>
         </header>
 
-        <div class="row d-flex justify-content-center">
+        <form id="payment-form" class="sr-payment-form row d-flex justify-content-center">
             <div class="col-4 m-3 px-4 py-2 border border-secondary rounded">
                 <h4 class="text-center">Datos de facturación</h4>
                 <label for="name">Nombre</label>
-                <input class="form-control m-2" type="text" id="name" placeholder="nombre completo">
+                <input class="form-control m-2" type="text" id="name" placeholder="nombre completo" required>
                 <label for="number">Telefono</label>
-                <input class="form-control m-2" id="number" type="text" placeholder="telefono">
+                <input class="form-control m-2" id="number" type="text" placeholder="telefono" required>
                 <label for="email">Correo eléctronico</label>
-                <input class="form-control m-2" type="text" id="email" placeholder="correo electronico">
+                <input class="form-control m-2" type="text" id="email" placeholder="correo electronico" required>
                 <label for="email" class="row px-3">Dirección
                 <input class="form-control m-2" type="text" placeholder="localidad">
                 <input class="form-control m-2" type="text" placeholder="colonia">
@@ -31,17 +31,19 @@
             </div>
             <div class="col-4 m-3 px-4 py-2 border border-secondary rounded" >
                 <h4 class="text-center">Datos de la sección</h4>
-                <div class="border rounded p-1 px-2">
+                <div class="border rounded p-1 px-2 row d-flex justify-content-center">
                     <p> <strong>Sección: </strong>  <%=section.name%> </p>
                     <p><strong>Dimensiones:</strong>  <%=section.dimension%> m²</p>
                 </div>
-                <div class="border rounded p-2">
+                <div class="border rounded p-1 px-2 row d-flex justify-content-center">
                    <p class="my-auto"><strong>Total: $<%=section.price%></strong></p>
                 </div>
-                <div class="row d-flex justify-content-center my-3">
+                <h4 class="text-center my-2">Métodos de pago</h4>
+                <div class="border rounded p-1 px-2 row d-flex justify-content-center my-3">
+                    <p class="py-2 text-center"><strong>Tarjeta</strong></p>
                     <div class="sr-main">
 
-                        <form id="payment-form" class="sr-payment-form pb-5">
+                        <div  class="pb-5">
                             <div id="card-element" class="form-control py-2">
                                 <!-- Elements will create input elements here -->
                             </div>
@@ -49,58 +51,26 @@
                             <!-- We'll put the error messages in this element -->
                             <div id="card-errors" role="alert" class="py-2"></div>
 
-                            <button id="button-text" class="btn btn-success p-2 align-self-center">Pagar</button>
-                        </form>
+                            <button id="button-text" class="btn btn-success p-2 text-center">Pagar</button>
+                        </div>
 
                         <div id="messages" role="alert" style="display: none;"></div>
+
                     </div>
 
-                    <!--<button type="button" class="col-10 btn btn-success my-4" id="checkout-button">Pago Stripe</button>
--->
-                    <div class="col-11">
-                        <div id="smart-button-container">
-                            <div style="text-align: center;">
-                                <div id="paypal-button-container"></div>
-                            </div>
+                    <p class="pb-2 text-center"><strong>Paypal</strong></p>
+
+                        <div style="text-align: center;">
+                            <div id="paypal-button-container"></div>
                         </div>
-                        <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=MXN" data-sdk-integration-source="button-factory"></script>
-                        <script>
-                            function initPayPalButton() {
-                                paypal.Buttons({
-                                    style: {
-                                        shape: 'rect',
-                                        color: 'gold',
-                                        layout: 'vertical',
-                                        label: 'paypal',
 
-                                    },
-
-                                    createOrder: function(data, actions) {
-                                        return actions.order.create({
-                                            purchase_units: [{"description":"Sección del inmueble","amount":{"currency_code":"MXN","value":20000}}]
-                                        });
-                                    },
-
-                                    onApprove: function(data, actions) {
-                                        return actions.order.capture().then(function(details) {
-                                            alert('Transaction completed by ' + details.payer.name.given_name + '!');
-                                        });
-                                    },
-
-                                    onError: function(err) {
-                                        console.log(err);
-                                    }
-                                }).render('#paypal-button-container');
-                            }
-                            initPayPalButton();
-                        </script>
-                    </div>
+                    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-sdk-integration-source="button-factory"></script>
+                    <script src="http://localhost:3000/javascript/paypal.js"></script>
                 </div>
             </div>
-        </div>
+        </form>
     </body>
     <footer>
-        <!-- <script src="http://localhost:3000/javascript/paypage.js"></script> -->
         <script src="http://localhost:3000/javascript/pay.js"></script>
     </footer>
 </html>

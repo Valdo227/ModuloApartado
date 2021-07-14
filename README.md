@@ -33,3 +33,4 @@ Las referencias a los archivos de js no encontré una mejor forma más limpia de
 leí la documentación de Express y según entendí es la mejor manera.
 
 Cualquier detalle, no dude en comentarme.
+Gracias

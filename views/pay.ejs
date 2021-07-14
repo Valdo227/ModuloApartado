@@ -1,76 +1,87 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Pago</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-        <script src="https://js.stripe.com/v3/"></script>
-    </head>
-    <body>
-        <header class="bg-success p-2 text-center">
-            <h1 class="text-white">Finaliza apartado</h1>
-        </header>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pago</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+<header class="bg-success p-2 text-center">
+    <h1 class="text-white">Finaliza apartado</h1>
+</header>
 
-        <form id="payment-form" class="sr-payment-form row d-flex justify-content-center">
-            <div class="col-4 m-3 px-4 py-2 border border-secondary rounded">
-                <h4 class="text-center">Datos de facturación</h4>
-                <label for="name">Nombre</label>
-                <input class="form-control m-2" type="text" id="name" placeholder="nombre completo" required>
-                <label for="number">Telefono</label>
-                <input class="form-control m-2" id="number" type="text" placeholder="telefono" required>
-                <label for="email">Correo eléctronico</label>
-                <input class="form-control m-2" type="text" id="email" placeholder="correo electronico" required>
-                <label for="email" class="row px-3">Dirección
-                <input class="form-control m-2" type="text" placeholder="localidad">
-                <input class="form-control m-2" type="text" placeholder="colonia">
-                <input class="form-control m-2" type="text" placeholder="calle">
-                <input class="form-control m-2" type="text" placeholder="num interior">
-                <input class="form-control m-2" type="text" placeholder="num exterior">
-                <input class="form-control m-2" type="text" placeholder="entre calles">
-                </label>
-            </div>
-            <div class="col-4 m-3 px-4 py-2 border border-secondary rounded" >
-                <h4 class="text-center">Datos de la sección</h4>
-                <div class="border rounded p-1 px-2 row d-flex justify-content-center">
-                    <p> <strong>Sección: </strong>  <%=section.name%> </p>
-                    <p><strong>Dimensiones:</strong>  <%=section.dimension%> m²</p>
-                </div>
-                <div class="border rounded p-1 px-2 row d-flex justify-content-center">
-                   <p class="my-auto"><strong>Total: $<%=section.price%></strong></p>
-                </div>
-                <h4 class="text-center my-2">Métodos de pago</h4>
-                <div class="border rounded p-1 px-2 row d-flex justify-content-center my-3">
-                    <p class="py-2 text-center"><strong>Tarjeta</strong></p>
-                    <div class="sr-main">
+<form id="payment-form" class="sr-payment-form row d-flex justify-content-center">
+    <div class="col-4 m-3 px-4 py-2 border border-secondary rounded">
+        <h4 class="text-center">Datos de la sección</h4>
+            <div class="border rounded p-1 px-2 row d-flex justify-content-center">
+            <p> <strong>Sección: </strong>  <%=property.code%></p>
+            <p> <strong>Nivel: </strong>  <%=property.floor.name%>%> </p>
+            <p> <strong>Tipología: </strong>  <%=property.building.type%> </p>
+            <p> <strong>Baños: </strong>  <%=property.features.bathrooms%> </p>
+        </div>
+        <div class="border rounded p-1 px-2 row d-flex justify-content-center">
+            <p class="text-center"><strong>Dimensiones</strong> </p>
+            <p><strong>Interior:</strong>  <%=property.building.construction%> m²</p>
+            <p><strong>Terraza:</strong>  <%=property.building.terrace%> m²</p>
+            <p><strong>Total:</strong>  <%=property.building.total%> m²</p>
+        </div>
+        <div class="border rounded p-1 px-2 row d-flex justify-content-center">
+            <p class="text-center"><strong>Precios</strong> </p>
+            <p><strong>Apartado:</strong> $ <%=Intl.NumberFormat().format(property.pricing.price*.1)%> <%=property.pricing.currencyy%></p>
+            <p><strong>Total: </strong> $ <%=Intl.NumberFormat().format(property.pricing.price)%> <%=property.pricing.currency%></p>
+        </div>
+    </div>
+    <div class="col-4 m-3 px-4 py-2 border border-secondary rounded">
+        <h4 class="text-center">Datos de contacto</h4>
+        <div class="border rounded p-1 px-2 row d-flex justify-content-center">
+            <label for="name">Nombre</label>
+            <input class="form-control m-2" type="text" id="name" placeholder="nombre completo" required>
+            <label for="number">Telefono</label>
+            <input class="form-control m-2" id="number" type="text" placeholder="telefono" required>
+            <label for="email">Correo</label>
+            <input class="form-control m-2" type="text" id="email" placeholder="correo electronico" required>
+        </div>
 
-                        <div  class="pb-5">
-                            <div id="card-element" class="form-control py-2">
-                                <!-- Elements will create input elements here -->
-                            </div>
+        <h4 class="text-center my-2">Métodos de pago</h4>
+        <div class="border rounded p-1 px-2 row d-flex justify-content-center my-3">
+            <p class="py-2 text-center"><strong>Tarjeta</strong></p>
+            <div class="sr-main">
 
-                            <!-- We'll put the error messages in this element -->
-                            <div id="card-errors" role="alert" class="py-2"></div>
-
-                            <button id="button-text" class="btn btn-success p-2 text-center">Pagar</button>
-                        </div>
-
-                        <div id="messages" role="alert" style="display: none;"></div>
-
+                <div  class="pb-2">
+                    <div id="card-element" class="form-control py-2">
+                        <!-- Elements will create input elements here -->
                     </div>
 
-                    <p class="pb-2 text-center"><strong>Paypal</strong></p>
+                    <!-- We'll put the error messages in this element -->
+                    <div id="card-errors" role="alert" class="py-2"></div>
 
-                        <div style="text-align: center;">
-                            <div id="paypal-button-container"></div>
-                        </div>
-
-                    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-sdk-integration-source="button-factory"></script>
-                    <script src="http://localhost:3000/javascript/paypal.js"></script>
+                    <button id="button-text" class="btn btn-success p-2 text-center">Pagar</button>
                 </div>
+
+                <div id="messages" role="alert" style="display: none;"></div>
+
             </div>
-        </form>
-    </body>
-    <footer>
-        <script src="http://localhost:3000/javascript/pay.js"></script>
-    </footer>
+
+            <p class="pb-1 text-center"><strong>Paypal</strong></p>
+
+            <div style="text-align: center;">
+                <div id="paypal-button-container"></div>
+            </div>
+
+            <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-sdk-integration-source="button-factory"></script>
+            <script src="http://localhost:3000/javascript/paypal.js"></script>
+        </div>
+    </div>
+</form>
+</body>
+<footer>
+    <script>
+        var pay_price = <%-property.pricing.price%> *10;
+        var pay_currency = '<%-property.pricing.currency%>';
+        var property_id = '<%-property._id%>';
+        var real_state_development = '<%-property.real_estate_development._id%>';
+    </script>
+    <script src="http://localhost:3000/javascript/pay.js"></script>
+</footer>
 </html>

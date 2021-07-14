@@ -1,22 +1,25 @@
+/**
+ * Despliegue del botón de paypal
+ */
 function initPayPalButton() {
     paypal.Buttons({
         style: {
             shape: 'rect',
             color: 'gold',
             layout: 'horizontal',
-            label: 'paypal',
-
+            label: 'paypal'
         },
 
         createOrder: function(data, actions) {
             return actions.order.create({
-                purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
+                purchase_units: [{"amount":{"currency_code":pay_currency,"value":pay_price}}]
             });
         },
 
         onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                alert('Transaction completed by ' + details.payer.name.given_name + '!');
+            return actions.order.capture().then(function() {
+                savePayment();
+                window.location.replace("http://localhost:3000/sections/payinfo");
             });
         },
 

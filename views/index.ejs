@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Modulo de apartado</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  </head>
-  <body>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modulo de apartado</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+<body>
   <header class="bg-success p-2 text-center">
     <h1 class="text-white">Modulo de apartado</h1>
   </header>
-    <h3 class="text-center mt-2">Secciones</h3>
-
-    <%sections.forEach(function(con) {%>
-
-    <div class="col-4 row border border-secondary rounded mx-auto">
-      <div class="col-9">
-        <p><strong><%=con.name%></strong></p>
-        <p>Dimensiones: <%=con.dimension%> m²</p>
-        <p>Precio: $<%=con.price%></p>
-      </div>
-      <div class="col-3 my-auto">
-        <a href="/sections/pay/<%=con.id%>" class="btn btn-success">Apartar</a>
-      </div>
+  <h3 class="text-center mt-2">Secciones</h3>
+  <%property.forEach(function(pr) { %>
+<div class="col-4 row border border-secondary rounded mx-auto">
+  <div class="col-9">
+    <p><strong><%=pr.code%></strong></p>
+    <p>Estado: <%=pr.contract_status%></p>
+    <p>nivel: <%=pr.floor.name%></p>
+    <p>Tipología: <%=pr.building.type%></p>
+    <p>Dimensiones: <%=pr.building.total%> m²</p>
+    <p>Precio: $<%=Intl.NumberFormat().format(pr.pricing.price)%> <%=pr.pricing.currency%> </p>
+  </div>
+  <%if(pr.contract_status === 'disponible'){ %>
+    <div class="col-3 my-auto">
+      <a href="/sections/pay/<%=pr._id%>" class="btn btn-success ">Apartar</a>
     </div>
-    <%});%>
-  </body>
+  <%}%>
+</div>
+<%});%>
+</body>
 </html>

@@ -1,35 +1,44 @@
 require('dotenv').config()
 const express = require('express');
 const router = express.Router();
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY,{
     apiVersion: '2020-08-27',
-    appInfo: { // For sample support and debugging, not required for production:
+    //Para debuguear, no se requiere en producción
+    appInfo: {
         name: "stripe-samples/accept-a-payment/custom-payment-flow",
         version: "0.0.2",
         url: "https://github.com/stripe-samples"
     }
 });
 
-
+/**
+ * GET Se obtiene la llave publica de negocio en Stripe
+ * @ResponseBody llave publica
+ */
 router.get('/config', (req, res) => {
     res.send({
         publishableKey: process.env.STRIPE_PUBLIC_KEY});
 });
 
+/**
+ * POST se crea un intento de pago
+ * @RequestBody cantidad y divisa
+ * @ResponseBody llave publica y client_secret
+ */
 router.post('/create-payment-intent', async (req, res) => {
-    const { amount } = req.body;
+    const { amount,currency } = req.body;
 
     const params = {
         payment_method_types: ['card'],
         amount: amount,
-        currency: 'mxn',
+        currency: currency,
     }
 
-    // Create a PaymentIntent with the amount, currency, and a payment method type.
+    // Se crea el intento de pago con la cantidad, divisa y metodo de pago.
     try {
         const paymentIntent = await stripe.paymentIntents.create(params);
 
-        // Send publishable key and PaymentIntent details to client
         res.send({
             clientSecret: paymentIntent.client_secret
         });
@@ -43,6 +52,10 @@ router.post('/create-payment-intent', async (req, res) => {
     }
 });
 
+/**
+ * Implementa uso de webhhoks, si se requiere implementar
+ */
+/*
 router.post('/webhook', async (req, res) => {
     let data, eventType;
 
@@ -79,10 +92,6 @@ router.post('/webhook', async (req, res) => {
         console.log('❌ Payment failed.');
     }
     res.sendStatus(200);
-});
-
-router.get("/stripe-key", (req, res) => {
-    res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY });
-});
+});*/
 
 module.exports = router;

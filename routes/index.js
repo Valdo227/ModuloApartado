@@ -1,105 +1,59 @@
 const express = require('express');
 const router = express.Router();
-const https = require('https')
+const  request = require('request');
 require('dotenv').config()
 const Payment = require('../models/PaymentModel')
+const body ={
+    real_estate_development_code: process.env.BUILDING_CODE
+}
+const headers =  {
+    'Authorization': process.env.BEARER_TOKEN,
+    'Content-Type': 'application/json'
+}
+const urlAPI = 'https://dev.api.capital28.investments/api/Property/list';
+
 /**
  * GET Página inicial
  * Se consume el API externo de Capital 28
  */
-router.get('/',async (req,res) => {
-    const data = JSON.stringify({
-        real_estate_development_code: process.env.BUILDING_CODE
+router.get('/', (req,res) =>{
+    request.post(urlAPI,{
+        headers,
+        body,
+        json:true
+    },(err,response) =>{
+        res.render('index', {property: response.body.Data.Property})
     })
-    let res_data=''
-    const options = {
-        hostname: 'dev.api.capital28.investments',
-        path: '/api/Property/list',
-        method: 'POST',
-        headers: {
-            'Authorization': process.env.BEARER_TOKEN,
-            'Content-Type': 'application/json'
-        }
-    }
-    const request= https.request(options, r => {
-
-        r.on('data', response => {
-            res_data +=response
-        })
-
-        r.on('end', ()=> {
-            res_data = JSON.parse(res_data);
-            if(res_data.Code === 200)
-                res.render('index', {property: res_data.Data.Property});
-        });
-
-    })
-
-    request.on('error', error => {
-        console.error(error)
-    })
-
-    request.write(data)
-
-    request.end()
 });
 
 /**
  * GET Página para el pago de la propiedad
  * Se consume el API externo de Capital 28
  */
-router.get('/pay/:id', async (req, res) => {
+router.get('/pay/:id', (req,res) =>{
+    request.post(urlAPI,{
+        headers,
+        body,
+        json:true
+    },(err,response) =>{
+        if(response.body.Code === 200) {
+            response.body.Data.Property.forEach(con => {
+                if (con._id === req.params.id) {
+                    res.render('pay', {property: con});
+                }
+            });
 
-    const data = JSON.stringify({
-        real_estate_development_code: process.env.BUILDING_CODE
-    })
-    let res_data=''
-    const options = {
-        hostname: 'dev.api.capital28.investments',
-        path: '/api/Property/list',
-        method: 'POST',
-        headers: {
-            'Authorization': process.env.BEARER_TOKEN,
-            'Content-Type': 'application/json'
         }
-    }
-    const request= https.request(options, r => {
-
-        r.on('data', response => {
-            res_data +=response
-        })
-
-        r.on('end', ()=> {
-            res_data = JSON.parse(res_data);
-            if(res_data.Code === 200) {
-                res_data.Data.Property.forEach(con => {
-                    if (con._id === req.params.id) {
-                        console.log(con);
-                        res.render('pay', {property: con});
-                    }
-                });
-
-            }
-        });
-
     })
-
-    request.on('error', error => {
-        console.error(error)
-    })
-
-    request.write(data)
-
-    request.end()
 });
 
 /**
- * GET Pagina de información despues del pago éxitoso.
+ * GET Pagina de información después del pago exitoso.
  */
-
 router.get('/payinfo', async (req, res) => {
     res.render('payInfo')
 });
+
 /**
  *  POST Guarda la información del pago
  *  @RequestBody nombre,correo y telefono del cliente; id de la propiedad y el inmueble

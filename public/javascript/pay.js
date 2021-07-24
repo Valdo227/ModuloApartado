@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        amount: pay_price,
+                        amount: pay_price*10,
                         currency: pay_currency
                     })
                 }
@@ -123,6 +123,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
     }
 });
+
+async function Paypal() {
+    if (!(document.getElementById("name").value === "" ||
+        document.getElementById("number").value === "" ||
+        document.getElementById("email").value === ""
+    )){
+        const {token} = await fetch('/payment/paypal-create-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                amount: pay_price,
+                currency: pay_currency
+            })
+        }).then((r) => r.json());
+
+        window.location.replace(`https://www.sandbox.paypal.com/checkoutnow?token=${token}`)
+        savePayment();
+
+    }
+}
 
 /**
  * Despliega los mensajes

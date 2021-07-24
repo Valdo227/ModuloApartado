@@ -1,6 +1,9 @@
 require('dotenv').config()
 const express = require('express');
+const  request = require('request');
 const router = express.Router();
+const Payment = require('../models/PaymentModel')
+const auth = {user: process.env.PAYPAL_CLIENT_ID , pass: process.env.PAYPAL_SECRET}
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY,{
     apiVersion: '2020-08-27',
@@ -52,6 +55,56 @@ router.post('/create-payment-intent', async (req, res) => {
     }
 });
 
+router.post('/paypal-create-payment', (req,res) =>{
+    const { amount,currency } = req.body;
+
+    const body = {
+        intent: 'CAPTURE',
+        purchase_units: [{
+            amount: {
+                currency_code: currency,
+                value: amount
+            }
+        }],
+        application_context:{
+            brand_name: 'The boat',
+            landing_page: 'NO_PREFERENCE',
+            user_action: 'PAY_NOW',
+            return_url: 'http://localhost:3000/payment/paypal-execute-payment',
+            cancel_url: 'http://localhost:3000/sections'
+        }
+    }
+    request.post(`${process.env.PAYPAL_SAND_API}/v2/checkout/orders`,{
+        auth,
+        body,
+        json:true
+    },(err,response) =>{
+        res.send({token:response.body.id})
+    })
+});
+
+router.get('/paypal-execute-payment', (req,res) =>{
+    const token = req.query.token;
+    request.post(`${process.env.PAYPAL_SAND_API}/v2/checkout/orders/${token}/capture`,{
+        auth,
+        body:{},
+        json:true
+    },(err,response) =>{
+        res.render('payInfo')
+    })
+})
+/*
+router.get('/paypal-verify-payment', (req,res) =>{
+    const token = req.query.token;
+    request.get(`${process.env.PAYPAL_SAND_API}/v2/payments/captures/0VD198636J087022R`,{
+        auth,
+        json:true
+    },(err,response) => {
+        res.json({data: response.body})
+    })
+});
+
+ */
 /**
  * Implementa uso de webhhoks, si se requiere implementar
  */

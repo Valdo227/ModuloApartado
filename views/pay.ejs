@@ -11,7 +11,7 @@
     <h1 class="text-white">Finaliza apartado</h1>
 </header>
 
-<form id="payment-form" class="sr-payment-form row d-flex justify-content-center">
+<div class="sr-payment-form row d-flex justify-content-center">
     <div class="col-4 m-3 px-4 py-2 border border-secondary rounded">
         <h4 class="text-center">Datos de la sección</h4>
             <div class="border rounded p-1 px-2 row d-flex justify-content-center">
@@ -32,7 +32,7 @@
             <p><strong>Total: </strong> $ <%=Intl.NumberFormat().format(property.pricing.price)%> <%=property.pricing.currency%></p>
         </div>
     </div>
-    <div class="col-4 m-3 px-4 py-2 border border-secondary rounded">
+    <form id="payment-form" class="col-4 m-3 px-4 py-2 border border-secondary rounded">
         <h4 class="text-center">Datos de contacto</h4>
         <div class="border rounded p-1 px-2 row d-flex justify-content-center">
             <label for="name">Nombre</label>
@@ -62,26 +62,26 @@
                 <div id="messages" role="alert" style="display: none;"></div>
 
             </div>
-
-            <p class="pb-1 text-center"><strong>Paypal</strong></p>
-
-            <div style="text-align: center;">
-                <div id="paypal-button-container"></div>
-            </div>
-
-            <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-sdk-integration-source="button-factory"></script>
-            <script src="http://localhost:3000/javascript/paypal.js"></script>
         </div>
+    </form>
+
+    <p class="pb-1 text-center"><strong>Paypal</strong></p>
+
+    <div style="text-align: center;">
+        <div id="paypal-button-container"></div>
     </div>
-</form>
+    <button onclick="Paypal()" class="btn btn-success p-2 text-center">Paypal</button>
+
+</div>
 </body>
 <footer>
     <script>
-        var pay_price = <%-property.pricing.price%> *10;
+        var pay_price = <%-property.pricing.price%>;
         var pay_currency = '<%-property.pricing.currency%>';
         var property_id = '<%-property._id%>';
         var real_state_development = '<%-property.real_estate_development._id%>';
     </script>
+    <script src="http://localhost:3000/javascript/paypal.js"></script>
     <script src="http://localhost:3000/javascript/pay.js"></script>
-</footer>
+        </footer>
 </html>
